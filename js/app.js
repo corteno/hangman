@@ -87,12 +87,13 @@ var game = () => {
             if (re.test(currentLetter)) {
                 if(!checkLetter(currentLetter)){
                     mistakesLeft--;
-                    console.log(mistakesLeft);
+                    updateMistakes();
                 }
             }
-
+            document.getElementById("guess-input").value = "";
             return false;
         }
+
     };
 
 
@@ -117,7 +118,7 @@ var setDifficulty = () => {
             mistakesLeftDisplay.className = "stat";
 
             diffDisplay.innerHTML = `Difficulty: <span class='strong'>${difficulty}</span>`;
-            mistakesLeftDisplay.innerHTML = `Mistakes left: <span class='strong'>${mistakesLeft}</span>`;
+            mistakesLeftDisplay.innerHTML = `Mistakes left: <span class='strong' id='mistakes-left'>${mistakesLeft}</span>`;
 
             stats.appendChild(diffDisplay);
             stats.appendChild(mistakesLeftDisplay);
@@ -131,11 +132,14 @@ var createLetters = () => {
     lettersWrapper.className = "letters-wrapper";
 
     for (var i = 0; i < currentWord.length; i++) {
-        if (currentWord[i] != " ") {
-
+        if (currentWord[i] != " ") {                            //If it's a letter
             var letterElement = document.createElement("div");
             letterElement.className = "letter";
             lettersWrapper.appendChild(letterElement);
+        } else {                                                // If it's a space
+            var spaceElement = document.createElement("div");
+            spaceElement.className = "space-element";
+            lettersWrapper.appendChild(spaceElement);
         }
 
     }
@@ -176,6 +180,11 @@ var checkLetter = (letter) => {
         return true;
     }
 };
+
+var updateMistakes = () => {
+    var mistakes = document.getElementById("mistakes-left");
+    mistakes.innerHTML = mistakesLeft;
+}
 
 var checkGuessedLetters = () => {
     //To be added
