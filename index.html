@@ -7,17 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 </head>
 <body>
-    <div id="app">
-        <div id="start-screen">
-            <label for="">Give me a word:</label>
-            <input type="text" id="word-input" pattern="[A-Za-z]"><br/>
-
-            <input type="radio" name="diff[]" value="easy" checked/>Easy<br />
-            <input type="radio" name="diff[]" value="medium" />Medium<br />
-            <input type="radio" name="diff[]" value="hard" />Hard<br />
-        </div>
-
+<div class="content-wrapper">
+    <div class="header-wrapper">
+        <p class="title">Hangman</p>
     </div>
+    <div id="app"></div>
+</div>
+
 
 <script async src="js/app.js"></script>
 </body>
