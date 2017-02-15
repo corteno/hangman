@@ -1,9 +1,3 @@
-const words = [
-    "hangman",
-    "something",
-    "doggy"
-
-];
 const app = document.getElementById("app");
 const difficulties = [
     {
@@ -18,6 +12,51 @@ const difficulties = [
         name: "hard",
         value: 5
     }
+];
+
+var words = [
+    {
+        difficulty: "easy",
+        word: "something"
+    },
+    {
+        difficulty: "easy",
+        word: "dog"
+    },
+    {
+        difficulty: "easy",
+        "word": "ferry"
+    },
+    {
+        difficulty: "easy",
+        word: "web developement"
+    },
+    {
+        difficulty: "medium",
+        word: "brown fox"
+    },
+    {
+        difficulty: "medium",
+        word: "lazy doggy"
+    },
+    {
+        difficulty: "medium",
+        word: "good boye"
+    },
+    {
+        difficulty: "medium",
+        "word": "jumps over"
+    },
+
+    {
+        difficulty: "hard",
+        word: "megszentségteleníthetetlségeskedésietekért"
+    },
+    {
+        difficulty: "hard",
+        word: "meticulous"
+    }
+
 ];
 
 var currentWord = "";
@@ -41,6 +80,7 @@ var game = () => {
     setDifficulty();
     createLetters();
     createGuessInput();
+    console.log(currentWord);
 
 
     document.getElementById("guess-input").onkeypress = function (e) {
@@ -124,24 +164,43 @@ var createStartingScreen = () => {
     var span = document.createElement("span");
     var input = document.createElement("input");
     var first = true;
+    var button = document.createElement("button");
 
-    startScreenWrapper.id = "start-screen";
-    inputWrapper.id = "input-wrapper";
-    input.id = "word-input";
-    input.setAttribute("pattern", "[A-Za-z]");
+    button.className = "start-button";
+    button.innerHTML = "Start Game";
 
-    label.className = "input-label";
+    button.addEventListener("click", () => {
+        //Setting difficulty
+        difficulty = document.querySelector('input[name="diff[]"]:checked').value;
 
-    span.innerHTML = "Give me a word";
-    span.className = "label-text";
+        //Setting current word
+        currentWord = getRandomWord(difficulty);
+
+        //Clearing the div
+        clearApp();
+        //Starting the game
+        game();
+    });
 
 
-    label.appendChild(span);
+    //Enable to get input to play with own word
+    /*startScreenWrapper.id = "start-screen";
+     inputWrapper.id = "input-wrapper";
+     input.id = "word-input";
+     input.setAttribute("pattern", "[A-Za-z]");
 
-    inputWrapper.appendChild(input);
-    inputWrapper.appendChild(label);
+     label.className = "input-label";
 
-    startScreenWrapper.appendChild(inputWrapper);
+     span.innerHTML = "Give me a word";
+     span.className = "label-text";
+
+
+     label.appendChild(span);
+
+     inputWrapper.appendChild(input);
+     inputWrapper.appendChild(label);
+
+     startScreenWrapper.appendChild(inputWrapper);*/
 
     difficulties.forEach((diff) => {
         var radio = document.createElement("input");
@@ -165,6 +224,7 @@ var createStartingScreen = () => {
 
     });
 
+    startScreenWrapper.appendChild(button);
     appendToApp(startScreenWrapper);
 
     //On enter press of this input
@@ -177,7 +237,7 @@ var createStartingScreen = () => {
             var re = new RegExp("[A-Za-z]");
 
             //Setting word to guess
-            currentWord = document.getElementById("word-input").value;
+            currentWord = document.getElementById("word-input").value.toLowerCase();
             if (re.test(currentWord)) {
                 //console.log(currentWord);
 
@@ -221,19 +281,25 @@ var createLetters = () => {
 var createGuessInput = () => {
     var inputWrapper = document.createElement("div");
     var input = document.createElement("input");
+    var label = document.createElement("label");
+    var span = document.createElement("span");
 
     inputWrapper.className = "input-wrapper";
+    inputWrapper.id = "guess-wrapper";
     input.id = "guess-input";
+    input.className = "guess-input";
     input.setAttribute("maxlength", "1");
 
+    label.className = "input-label";
+
     inputWrapper.appendChild(input);
+    inputWrapper.appendChild(label);
     appendToApp(inputWrapper);
     input.focus();
 };
 
 var checkLetter = (letter) => {
     var foundLetter = false;
-
 
     for (var i = 0; i < currentWord.length; i++) {
         if (letter == currentWord[i]) {
@@ -292,9 +358,9 @@ var createGameOverScene = (state) => {
         createStartingScreen();
     });
 
-    if(state == "win"){
+    if (state == "win") {
         gameOverText.innerHTML = `Congratulations! You've guessed <span class='strong'>${currentWord}!</span>`;
-    } else if (state == "loss"){
+    } else if (state == "loss") {
         gameOverText.innerHTML = `Sorry! Your word was ${currentWord}.`;
     }
 
@@ -303,6 +369,42 @@ var createGameOverScene = (state) => {
     appendToApp(continueButton);
 };
 
+var getRandomWord = (difficulty) => {
+    var tempWords = [];
+
+    switch (difficulty) {
+        case "easy":
+
+            words.forEach((word) => {
+                if (word.difficulty == difficulty) {
+                    tempWords.push(word);
+                }
+            });
+            return tempWords[getRandomInt(0, tempWords.length)].word;
+
+            break;
+        case "medium":
+            words.forEach((word) => {
+                if (word.difficulty == difficulty) {
+                    tempWords.push(word);
+                }
+            });
+            return tempWords[getRandomInt(0, tempWords.length)].word;
+
+            break;
+        case "hard":
+            words.forEach((word) => {
+                if (word.difficulty == difficulty) {
+                    tempWords.push(word);
+                }
+            });
+            return tempWords[getRandomInt(0, tempWords.length)].word;
+            break;
+        default:
+            break;
+    }
+
+};
 
 var clearApp = () => {
     app.innerHTML = "";
@@ -312,6 +414,9 @@ var appendToApp = (element) => {
     app.appendChild(element);
 }
 
+var getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 //Starting game
 startingScreen();
